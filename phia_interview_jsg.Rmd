@@ -76,8 +76,25 @@ Note that a participant was omitted from this analysis if their age was missing.
 
 ### Question 3
 
-There were `r left_join(odk, vl_dat, by = "ptid") %>% filter(confgend == 2, testtype %in% c("VL", "VL_DBS"), approved == "approved") %>% nrow()` females with approved Viral Load Results from plasma or DBS in the ODK dataset.
+```{r}
+odk_full <- left_join(odk, vl_dat, by = "ptid")
+```
 
+
+There were `r odk_full %>% filter(confgend == 2, testtype %in% c("VL", "VL_DBS"), approved == "approved") %>% nrow()` females with approved Viral Load Results from plasma or DBS in the ODK dataset.
+
+### Question 4
+
+Please find a new dataset attached.
+
+```{r}
+odk_vl <- odk_full %>% 
+  filter(testtype %in% c("VL", "VL_DBS"),
+         approved == "approved") %>% 
+  select(ptid, testtype, guspec, dateadded, result)
+
+write.csv(odk_vl, "final_jsg.csv")
+```
 
 
 

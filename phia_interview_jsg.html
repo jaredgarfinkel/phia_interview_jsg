@@ -404,7 +404,18 @@ vl_dat_uniq &lt;- vl_dat %&gt;%
 </div>
 <div id="question-3" class="section level3">
 <h3>Question 3</h3>
+<pre class="r"><code>odk_full &lt;- left_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
 <p>There were 52 females with approved Viral Load Results from plasma or DBS in the ODK dataset.</p>
+</div>
+<div id="question-4" class="section level3">
+<h3>Question 4</h3>
+<p>Please find a new dataset attached.</p>
+<pre class="r"><code>odk_vl &lt;- odk_full %&gt;% 
+  filter(testtype %in% c(&quot;VL&quot;, &quot;VL_DBS&quot;),
+         approved == &quot;approved&quot;) %&gt;% 
+  select(ptid, testtype, guspec, dateadded, result)
+
+write.csv(odk_vl, &quot;final_jsg.csv&quot;)</code></pre>
 </div>
 
 
