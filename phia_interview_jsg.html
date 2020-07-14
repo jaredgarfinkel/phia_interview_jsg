@@ -372,7 +372,9 @@ summary {
 <pre class="r"><code>odk &lt;- read_csv(&quot;./data/ODK.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   mutate(ptid = coalesce(ptide, ptidb)) %&gt;% 
-  select(ptid, confagey, confgend)</code></pre>
+  select(ptid, confagey, confgend) %&gt;% 
+  mutate(ptid = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
+         ptid = as_factor(ptid))</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   PTIDE = col_character(),
@@ -380,123 +382,11 @@ summary {
 ##   CONFAGEY = col_double(),
 ##   CONFGEND = col_double()
 ## )</code></pre>
-<pre class="r"><code>skimr::skim(odk)</code></pre>
-<table>
-<caption>Data summary</caption>
-<tbody>
-<tr class="odd">
-<td align="left">Name</td>
-<td align="left">odk</td>
-</tr>
-<tr class="even">
-<td align="left">Number of rows</td>
-<td align="left">103</td>
-</tr>
-<tr class="odd">
-<td align="left">Number of columns</td>
-<td align="left">3</td>
-</tr>
-<tr class="even">
-<td align="left">_______________________</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Column type frequency:</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">character</td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left">numeric</td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left">________________________</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Group variables</td>
-<td align="left">None</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: character</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">skim_variable</th>
-<th align="right">n_missing</th>
-<th align="right">complete_rate</th>
-<th align="right">min</th>
-<th align="right">max</th>
-<th align="right">empty</th>
-<th align="right">n_unique</th>
-<th align="right">whitespace</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ptid</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">103</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: numeric</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">skim_variable</th>
-<th align="right">n_missing</th>
-<th align="right">complete_rate</th>
-<th align="right">mean</th>
-<th align="right">sd</th>
-<th align="right">p0</th>
-<th align="right">p25</th>
-<th align="right">p50</th>
-<th align="right">p75</th>
-<th align="right">p100</th>
-<th align="left">hist</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">confagey</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">35.19</td>
-<td align="right">16.69</td>
-<td align="right">0</td>
-<td align="right">26</td>
-<td align="right">37</td>
-<td align="right">48.5</td>
-<td align="right">64</td>
-<td align="left">▂▃▇▆▃</td>
-</tr>
-<tr class="even">
-<td align="left">confgend</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1.67</td>
-<td align="right">0.47</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2.0</td>
-<td align="right">2</td>
-<td align="left">▃▁▁▁▇</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>vl_dat &lt;- read_csv(&quot;./data/vl_all_active.csv&quot;) %&gt;% 
-  janitor::clean_names()</code></pre>
+  janitor::clean_names() %&gt;% 
+  tibble() %&gt;% 
+  mutate(&quot;ptid&quot; = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
+         ptid = as_factor(ptid))</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   PTID = col_character(),
@@ -510,22 +400,23 @@ summary {
 ##   RESULT = col_character(),
 ##   APPROVED = col_character()
 ## )</code></pre>
-<pre class="r"><code>full_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
-<pre><code>## # A tibble: 226 x 12
-##    ptid  confagey confgend testtype guspec_index guspec dateadded fileid
-##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;
-##  1 US97~       38        1 VL       ANG0030B     ANG00~ 7/9/2018   42412
-##  2 US97~       38        1 VL       ANG0030B     ANG00~ 7/9/2018   42407
-##  3 US97~        0        1 PCR      CNF00TM5     CNF00~ 10/18/20~  44529
-##  4 US97~        0        1 PCR      CNF00TM5     CNF00~ 10/25/20~  44687
-##  5 US97~        0        1 PCR      CNF00TM5     CNF00~ 10/25/20~  44706
-##  6 US97~        0        1 PCR      CNF00TM5     CNF00~ 10/18/20~  44556
-##  7 US97~        1        1 PCR      GNQ0016Z     GNQ00~ 7/30/2018  42835
-##  8 US97~        1        1 PCR      GNQ0016Z     GNQ00~ 7/19/2018  42634
-##  9 US97~        1        1 PCR      GNQ0016Z     GNQ00~ 7/26/2018  42753
-## 10 US97~        1        1 PCR      GNQ0016Z     GNQ00~ 7/19/2018  42626
-## # ... with 216 more rows, and 4 more variables: countrycode &lt;chr&gt;, test &lt;chr&gt;,
-## #   result &lt;chr&gt;, approved &lt;chr&gt;</code></pre>
+<pre class="r"><code>full_dat &lt;- full_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
+<p>There are 217 rows by 12 columns in the combined dataset.</p>
+<p>There are 108 unique identifiers.</p>
+<p>Of these,</p>
+<pre class="r"><code>odk_uniq &lt;- odk %&gt;% 
+  select(ptid) %&gt;% 
+  arrange()
+
+vl_dat_uniq &lt;- vl_dat %&gt;% 
+  select(ptid) %&gt;% 
+  unique() %&gt;% 
+  arrange()
+
+rbind(odk_uniq, vl_dat_uniq) %&gt;% 
+  unique() %&gt;% 
+  nrow()</code></pre>
+<pre><code>## [1] 108</code></pre>
 
 
 

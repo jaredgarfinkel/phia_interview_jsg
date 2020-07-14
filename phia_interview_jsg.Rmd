@@ -28,19 +28,41 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 odk <- read_csv("./data/ODK.csv") %>% 
   janitor::clean_names() %>% 
   mutate(ptid = coalesce(ptide, ptidb)) %>% 
-  select(ptid, confagey, confgend)
-
-skimr::skim(odk)
+  select(ptid, confagey, confgend) %>% 
+  mutate(ptid = str_trunc(ptid, 6, "left", ""),
+         ptid = as_factor(ptid))
 ```
 
 ```{r}
 vl_dat <- read_csv("./data/vl_all_active.csv") %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  tibble() %>% 
+  mutate("ptid" = str_trunc(ptid, 6, "left", ""),
+         ptid = as_factor(ptid))
 ```
 
 ```{r}
-full_join(odk, vl_dat, by = "ptid")
+full_dat <- full_join(odk, vl_dat, by = "ptid")
 ```
 
+There are `r nrow(full_dat)` rows by `r ncol(full_dat)` columns in the combined dataset. 
 
+There are `r n_distinct(pull(full_dat, ptid))` unique identifiers.
+
+Of these, 
+
+```{r}
+odk_uniq <- odk %>% 
+  select(ptid) %>% 
+  arrange()
+
+vl_dat_uniq <- vl_dat %>% 
+  select(ptid) %>% 
+  unique() %>% 
+  arrange()
+
+rbind(odk_uniq, vl_dat_uniq) %>% 
+  unique() %>% 
+  nrow()
+```
 
