@@ -2,7 +2,7 @@
 title: "phia_interview_jsg"
 author: "Jared Garfinkel"
 date: "7/14/2020"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
