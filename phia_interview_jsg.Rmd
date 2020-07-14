@@ -45,6 +45,7 @@ vl_dat <- read_csv("./data/vl_all_active.csv") %>%
 ```{r}
 full_dat <- full_join(odk, vl_dat, by = "ptid")
 ```
+### Question 1
 
 There are `r nrow(full_dat)` rows by `r ncol(full_dat)` columns in the combined dataset. 
 
@@ -65,7 +66,15 @@ Of these, `r setdiff(odk_uniq, vl_dat_uniq) %>% nrow()` participants can be foun
 
 while `r setdiff(vl_dat_uniq, odk_uniq) %>% nrow()` participants can be found in the vl_all_active dataset and not the ODK dataset.
 
+### Question 2
 
+Among adults 18 years or older, `r full_dat %>% filter(confagey > 17, approved == "approved") %>% nrow()` participants had a blood test that was approved.
+
+Meanwhile, `r full_dat %>% filter(confagey > 17, approved == "failure") %>% nrow()` adults had a blood test that failed.
+
+Note that a participant can have a failed and approved blood test if the test was run again successfully after a failure.
+
+### Question 3
 
 
 

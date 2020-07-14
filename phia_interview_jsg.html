@@ -381,6 +381,8 @@ summary {
   mutate(&quot;ptid&quot; = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
          ptid = as_factor(ptid))</code></pre>
 <pre class="r"><code>full_dat &lt;- full_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
+<div id="question-1" class="section level3">
+<h3>Question 1</h3>
 <p>There are 217 rows by 12 columns in the combined dataset.</p>
 <p>There are 108 unique identifiers.</p>
 <pre class="r"><code>odk_uniq &lt;- odk %&gt;% 
@@ -393,6 +395,16 @@ vl_dat_uniq &lt;- vl_dat %&gt;%
   arrange()</code></pre>
 <p>Of these, 14 participants can be found in the ODK dataset and not the vl_all_active dataset,</p>
 <p>while 5 participants can be found in the vl_all_active dataset and not the ODK dataset.</p>
+</div>
+<div id="question-2" class="section level3">
+<h3>Question 2</h3>
+<p>Among adults 18 years or older, 78 participants had a blood test that was approved.</p>
+<p>Meanwhile, 4 adults had a blood test that failed.</p>
+<p>Note that a participant can have a failed and approved blood test if the test was run again successfully after a failure.</p>
+</div>
+<div id="question-3" class="section level3">
+<h3>Question 3</h3>
+</div>
 
 
 
