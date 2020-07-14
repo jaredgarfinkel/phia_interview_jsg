@@ -369,53 +369,38 @@ summary {
 </div>
 
 
-<pre class="r"><code>odk &lt;- read_csv(&quot;./data/ODK.csv&quot;) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  mutate(ptid = coalesce(ptide, ptidb)) %&gt;% 
-  select(ptid, confagey, confgend) %&gt;% 
-  mutate(ptid = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
-         ptid = as_factor(ptid))</code></pre>
-<pre class="r"><code>vl_dat &lt;- read_csv(&quot;./data/vl_all_active.csv&quot;) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  tibble() %&gt;% 
-  mutate(&quot;ptid&quot; = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
-         ptid = as_factor(ptid))</code></pre>
-<pre class="r"><code>full_dat &lt;- full_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
 <div id="question-1" class="section level3">
 <h3>Question 1</h3>
+<div id="a-how-many-participants-have-odk-data-but-not-data-in-vl_all_active-and-vice-versa" class="section level4">
+<h4>a) How many participants have ODK data, but not data in vl_all_active, and vice versa?</h4>
+</div>
+<div id="b-how-many-participants-are-in-both-datasets" class="section level4">
+<h4>b) How many participants are in both datasets?</h4>
 <p>There are 217 rows by 12 columns in the combined dataset.</p>
 <p>There are 108 unique identifiers.</p>
-<pre class="r"><code>odk_uniq &lt;- odk %&gt;% 
-  select(ptid) %&gt;% 
-  arrange()
-
-vl_dat_uniq &lt;- vl_dat %&gt;% 
-  select(ptid) %&gt;% 
-  unique() %&gt;% 
-  arrange()</code></pre>
 <p>Of these, 14 participants can be found in the ODK dataset and not the vl_all_active dataset,</p>
 <p>while 5 participants can be found in the vl_all_active dataset and not the ODK dataset.</p>
 </div>
+</div>
 <div id="question-2" class="section level3">
 <h3>Question 2</h3>
+<div id="how-many-adults-age-18-have-had-a-dna-pcr-test-that-failed-how-many-adults-had-a-dna-pcr-test-that-was-approved" class="section level4">
+<h4>How many adults (age &gt;= 18) have had a DNA PCR test that failed? How many adults had a DNA PCR test that was approved?</h4>
 <p>Among adults 18 years or older, 7 participants had a blood test that was approved.</p>
 <p>Meanwhile, 2 adults had a blood test that failed.</p>
 <p>Note that a participant was omitted from this analysis if their age was missing.</p>
 </div>
+</div>
 <div id="question-3" class="section level3">
 <h3>Question 3</h3>
-<pre class="r"><code>odk_full &lt;- left_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
+<div id="how-many-females-who-have-odk-data-have-approved-viral-load-results-plasma-or-dbs" class="section level4">
+<h4>How many females who have ODK data have approved Viral Load Results (Plasma or DBS)?</h4>
 <p>There were 52 females with approved Viral Load Results from plasma or DBS in the ODK dataset.</p>
+</div>
 </div>
 <div id="question-4" class="section level3">
 <h3>Question 4</h3>
 <p>Please find a new dataset attached.</p>
-<pre class="r"><code>odk_vl &lt;- odk_full %&gt;% 
-  filter(testtype %in% c(&quot;VL&quot;, &quot;VL_DBS&quot;),
-         approved == &quot;approved&quot;) %&gt;% 
-  select(ptid, testtype, guspec, dateadded, result)
-
-write.csv(odk_vl, &quot;final_jsg.csv&quot;)</code></pre>
 </div>
 
 
