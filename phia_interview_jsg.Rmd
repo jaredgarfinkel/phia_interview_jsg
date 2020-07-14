@@ -11,6 +11,7 @@ library(viridis)
 knitr::opts_chunk$set(
 	echo = TRUE,
 	warning = FALSE,
+	message = FALSE,
 	fig.width = 8, 
   fig.height = 6,
   out.width = "90%"
@@ -49,8 +50,6 @@ There are `r nrow(full_dat)` rows by `r ncol(full_dat)` columns in the combined 
 
 There are `r n_distinct(pull(full_dat, ptid))` unique identifiers.
 
-Of these, 
-
 ```{r}
 odk_uniq <- odk %>% 
   select(ptid) %>% 
@@ -60,9 +59,13 @@ vl_dat_uniq <- vl_dat %>%
   select(ptid) %>% 
   unique() %>% 
   arrange()
-
-rbind(odk_uniq, vl_dat_uniq) %>% 
-  unique() %>% 
-  nrow()
 ```
+
+Of these, `r setdiff(odk_uniq, vl_dat_uniq) %>% nrow()` participants can be found in the ODK dataset and not the vl_all_active dataset,
+
+while `r setdiff(vl_dat_uniq, odk_uniq) %>% nrow()` participants can be found in the vl_all_active dataset and not the ODK dataset.
+
+
+
+
 

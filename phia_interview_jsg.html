@@ -375,35 +375,14 @@ summary {
   select(ptid, confagey, confgend) %&gt;% 
   mutate(ptid = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
          ptid = as_factor(ptid))</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   PTIDE = col_character(),
-##   PTIDB = col_character(),
-##   CONFAGEY = col_double(),
-##   CONFGEND = col_double()
-## )</code></pre>
 <pre class="r"><code>vl_dat &lt;- read_csv(&quot;./data/vl_all_active.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   tibble() %&gt;% 
   mutate(&quot;ptid&quot; = str_trunc(ptid, 6, &quot;left&quot;, &quot;&quot;),
          ptid = as_factor(ptid))</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   PTID = col_character(),
-##   TESTTYPE = col_character(),
-##   GUSPEC_INDEX = col_character(),
-##   GUSPEC = col_character(),
-##   DATEADDED = col_character(),
-##   FILEID = col_double(),
-##   COUNTRYCODE = col_character(),
-##   TEST = col_character(),
-##   RESULT = col_character(),
-##   APPROVED = col_character()
-## )</code></pre>
 <pre class="r"><code>full_dat &lt;- full_join(odk, vl_dat, by = &quot;ptid&quot;)</code></pre>
 <p>There are 217 rows by 12 columns in the combined dataset.</p>
 <p>There are 108 unique identifiers.</p>
-<p>Of these,</p>
 <pre class="r"><code>odk_uniq &lt;- odk %&gt;% 
   select(ptid) %&gt;% 
   arrange()
@@ -411,12 +390,9 @@ summary {
 vl_dat_uniq &lt;- vl_dat %&gt;% 
   select(ptid) %&gt;% 
   unique() %&gt;% 
-  arrange()
-
-rbind(odk_uniq, vl_dat_uniq) %&gt;% 
-  unique() %&gt;% 
-  nrow()</code></pre>
-<pre><code>## [1] 108</code></pre>
+  arrange()</code></pre>
+<p>Of these, 14 participants can be found in the ODK dataset and not the vl_all_active dataset,</p>
+<p>while 5 participants can be found in the vl_all_active dataset and not the ODK dataset.</p>
 
 
 
